@@ -553,6 +553,119 @@ body {
   text-align: right;
 }
 
+/* Network Section */
+.network-section {
+  border-left-color: var(--accent-purple);
+}
+
+.network-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.network-card {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+}
+
+.network-card.executive {
+  border-top: 3px solid var(--accent-orange);
+}
+
+.network-card.judicial {
+  border-top: 3px solid var(--accent-red);
+}
+
+.network-card.aligned {
+  border-top: 3px solid var(--accent-yellow);
+}
+
+.network-card.oversight {
+  border-top: 3px solid var(--accent-blue);
+}
+
+.network-card h3 {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.network-card.executive h3 { color: var(--accent-orange); }
+.network-card.judicial h3 { color: var(--accent-red); }
+.network-card.aligned h3 { color: var(--accent-yellow); }
+.network-card.oversight h3 { color: var(--accent-blue); }
+
+.network-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.network-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.network-table td {
+  padding: 0.4rem 0;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.network-table td:first-child {
+  color: var(--text-muted);
+  width: 55%;
+}
+
+.network-table td:last-child {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.network-table td.highlight {
+  color: var(--accent-red);
+  font-weight: 700;
+}
+
+.network-table .tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  background: var(--accent-red);
+  color: var(--bg-dark);
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.5rem;
+  font-weight: 700;
+}
+
+.network-insight {
+  background: rgba(168, 85, 247, 0.1);
+  border: 2px solid var(--accent-purple);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.network-insight h3 {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-purple);
+  margin-bottom: 1rem;
+}
+
+.network-insight p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.network-insight p:last-child {
+  margin-bottom: 0;
+}
+
 /* Accountability Section */
 .accountability-section {
   border-left-color: var(--accent-red);
