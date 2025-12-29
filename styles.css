@@ -280,6 +280,73 @@ body {
 .dot.potential { background: var(--accent-yellow); }
 .dot.unknown { background: #333; }
 
+/* Spending Breakdown */
+.spending-breakdown {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-top: 3px solid var(--text-muted);
+}
+
+.spending-breakdown h3 {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.breakdown-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.spending-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.spending-table th,
+.spending-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.8rem;
+}
+
+.spending-table th {
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+.spending-table td {
+  color: var(--text-secondary);
+}
+
+.spending-table td:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.spending-table td:nth-child(2) {
+  color: var(--accent-yellow);
+  font-weight: 500;
+}
+
+.breakdown-insight {
+  font-size: 0.85rem;
+  color: var(--accent-yellow);
+  padding: 0.75rem;
+  background: rgba(234, 179, 8, 0.1);
+  border-left: 3px solid var(--accent-yellow);
+  margin-top: 1rem;
+}
+
 /* Insight Section */
 .insight-section {
   border-left-color: var(--accent-yellow);
