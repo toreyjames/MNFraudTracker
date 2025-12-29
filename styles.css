@@ -167,6 +167,21 @@ body {
   color: var(--text-muted);
 }
 
+/* Abbreviations Key */
+.abbreviations {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.abbreviations strong {
+  color: var(--text-secondary);
+}
+
 /* Fraud Tiers Table */
 .takeaway-table {
   width: 100%;
