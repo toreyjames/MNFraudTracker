@@ -794,31 +794,20 @@ Sincerely,
       const cityLower = city.toLowerCase();
       const cityEncoded = encodeURIComponent(city);
       
-      // Update city name display
-      document.getElementById('search-city-name').textContent = city;
-      
       // Generate search URLs
-      document.getElementById('link-sos').href = 
-        `https://mblsportal.sos.state.mn.us/Business/Search?City=${cityEncoded}`;
-      
-      document.getElementById('link-childcare').href = 
-        `https://licensinglookup.dhs.state.mn.us/`;
-      
-      document.getElementById('link-healthcare').href = 
-        `https://www.hlb.state.mn.us/verify/`;
+      document.getElementById('link-sos').href = `https://mblsportal.sos.state.mn.us/Business/Search?City=${cityEncoded}`;
+      document.getElementById('link-childcare').href = `https://licensinglookup.dhs.state.mn.us/`;
+      document.getElementById('link-healthcare').href = `https://www.hlb.state.mn.us/verify/`;
       
       // Property lookup - use county-specific if available
       const assessorUrl = countyAssessors[cityLower] || countyAssessors['default'];
       document.getElementById('link-property').href = assessorUrl;
       
       // Google Maps search
-      document.getElementById('link-google').href = 
-        `https://www.google.com/maps/search/daycare+${cityEncoded}+minnesota`;
+      document.getElementById('link-google').href = `https://www.google.com/maps/search/daycare+${cityEncoded}+minnesota`;
       
       // Show results
       document.getElementById('search-results').style.display = 'block';
-      
-      // Scroll to results
       document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
     }
     
