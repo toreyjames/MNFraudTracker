@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="flagged-businesses.js"></script>
 </head>
 <body>
   <div class="scanlines"></div>
@@ -172,61 +173,74 @@
         </div>
       </div>
 
-      <!-- SEARCH TOOL -->
+      <!-- FLAGGED BUSINESSES SEARCH -->
       <div class="search-tool">
-        <h3>🔍 INVESTIGATE YOUR CITY</h3>
-        <p>Enter a Minnesota city to search all public databases for providers to verify:</p>
+        <h3>🚨 SEARCH FLAGGED BUSINESSES</h3>
+        <p>Search businesses that have been <strong>charged, convicted, or flagged</strong> in Minnesota fraud cases:</p>
         
         <div class="search-input-row">
-          <input type="text" id="city-search" placeholder="Enter city name (e.g., Minneapolis, St. Cloud, Rochester)" />
-          <button class="search-btn" onclick="searchCity()">Search All Databases</button>
+          <input type="text" id="business-search" placeholder="Search by city, business name, or owner name..." />
+          <select id="program-filter">
+            <option value="all">All Programs</option>
+            <option value="fof">Feeding Our Future</option>
+            <option value="daycare">Daycare / CCAP</option>
+            <option value="healthcare">Healthcare / Medicaid</option>
+            <option value="housing">Housing</option>
+          </select>
+          <button class="search-btn" onclick="searchFlagged()">Search</button>
+        </div>
+
+        <div id="flagged-results" class="flagged-results">
+          <div class="results-header">
+            <span id="results-count">0</span> flagged businesses found
+            <span class="results-note">(from DOJ indictments, court records, and investigations)</span>
+          </div>
+          <div id="flagged-list" class="flagged-list"></div>
+        </div>
+
+        <div class="search-sources">
+          <p><strong>Sources:</strong> <a href="https://www.justice.gov/usao-mn" target="_blank">DOJ Press Releases</a> | Court Documents | Investigative Reports</p>
+          <p class="add-tip">Know of a business that should be on this list? <a href="https://twitter.com/intent/tweet?text=@nickshirleyy%20Found%20a%20suspect%20business%20in%20MN:" target="_blank">Report it</a></p>
+        </div>
+      </div>
+
+      <!-- INVESTIGATE YOUR CITY -->
+      <div class="search-tool" style="border-color: var(--accent-yellow);">
+        <h3 style="color: var(--accent-yellow);">🔍 INVESTIGATE YOUR CITY</h3>
+        <p>Search public databases for <strong>any</strong> business in your area:</p>
+        
+        <div class="search-input-row">
+          <input type="text" id="city-search" placeholder="Enter city name (e.g., Minneapolis, St. Cloud)" />
+          <button class="search-btn" style="background: var(--accent-yellow);" onclick="searchCity()">Search Databases</button>
         </div>
 
         <div id="search-results" class="search-results" style="display: none;">
-          <h4>Search results for: <span id="search-city-name"></span></h4>
-          <p class="search-tip">Click each link to search that database. Look for the same names/addresses across multiple programs.</p>
-          
           <div class="search-links">
             <a id="link-sos" href="#" target="_blank" class="search-link">
               <span class="link-icon">🏢</span>
               <span class="link-title">Business Registrations</span>
-              <span class="link-desc">MN Secretary of State — all registered businesses</span>
+              <span class="link-desc">MN Secretary of State</span>
             </a>
-            
             <a id="link-childcare" href="#" target="_blank" class="search-link">
               <span class="link-icon">👶</span>
               <span class="link-title">Licensed Daycares</span>
-              <span class="link-desc">DHS Licensed Child Care Providers</span>
+              <span class="link-desc">DHS Provider Search</span>
             </a>
-            
             <a id="link-healthcare" href="#" target="_blank" class="search-link">
               <span class="link-icon">🏥</span>
               <span class="link-title">Healthcare Providers</span>
-              <span class="link-desc">MN Board of Medical Practice</span>
+              <span class="link-desc">Medical Board</span>
             </a>
-            
             <a id="link-property" href="#" target="_blank" class="search-link">
               <span class="link-icon">🏠</span>
               <span class="link-title">Property Records</span>
-              <span class="link-desc">County assessor — who owns what</span>
+              <span class="link-desc">County Assessor</span>
             </a>
-
             <a id="link-google" href="#" target="_blank" class="search-link">
               <span class="link-icon">📍</span>
               <span class="link-title">Google Maps</span>
-              <span class="link-desc">See the actual locations</span>
+              <span class="link-desc">See locations</span>
             </a>
-          </div>
-
-          <div class="search-checklist">
-            <h4>What to look for:</h4>
-            <ul>
-              <li>✓ Same owner name across daycare + healthcare + housing businesses</li>
-              <li>✓ Multiple businesses at the same address</li>
-              <li>✓ Businesses registered during COVID (2020-2021)</li>
-              <li>✓ Residential addresses listed as business locations</li>
-              <li>✓ No visible signage or activity at the address</li>
-            </ul>
           </div>
         </div>
       </div>
@@ -743,14 +757,60 @@ Sincerely,
       document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
     }
     
-    // Allow Enter key to trigger search
+    // Flagged business search
+    function searchFlagged() {
+      const query = document.getElementById('business-search').value;
+      const program = document.getElementById('program-filter').value;
+      
+      const results = searchBusinesses(query, program);
+      
+      document.getElementById('results-count').textContent = results.length;
+      
+      const listEl = document.getElementById('flagged-list');
+      
+      if (results.length === 0) {
+        listEl.innerHTML = '<div class="no-results">No businesses found matching your search. Try a different city or program.</div>';
+        return;
+      }
+      
+      listEl.innerHTML = results.map(biz => `
+        <div class="flagged-item ${biz.status}">
+          <div class="flagged-header">
+            <span class="flagged-name">${biz.name}</span>
+            <span class="flagged-status ${getStatusClass(biz.status)}">${biz.status.toUpperCase()}</span>
+          </div>
+          <div class="flagged-details">
+            <span class="flagged-city">📍 ${biz.city}</span>
+            <span class="flagged-program">${getProgramLabel(biz.program)}</span>
+            ${biz.amount ? `<span class="flagged-amount">💰 ${biz.amount}</span>` : ''}
+          </div>
+          ${biz.defendants.length > 0 ? `<div class="flagged-defendants">👤 ${biz.defendants.join(', ')}</div>` : ''}
+          <div class="flagged-notes">${biz.notes}</div>
+          <div class="flagged-source">Source: ${biz.source}</div>
+          <div class="flagged-actions">
+            <a href="https://www.google.com/maps/search/${encodeURIComponent(biz.address)}" target="_blank" class="verify-link">📍 View on Map</a>
+            <a href="https://mblsportal.sos.state.mn.us/Business/Search?Name=${encodeURIComponent(biz.name)}" target="_blank" class="verify-link">🏢 SOS Lookup</a>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Load all businesses on page load
     document.addEventListener('DOMContentLoaded', function() {
-      const searchInput = document.getElementById('city-search');
-      if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            searchCity();
-          }
+      searchFlagged(); // Show all businesses initially
+      
+      // Allow Enter key to trigger searches
+      const businessSearch = document.getElementById('business-search');
+      if (businessSearch) {
+        businessSearch.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') searchFlagged();
+        });
+      }
+      
+      const citySearch = document.getElementById('city-search');
+      if (citySearch) {
+        citySearch.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') searchCity();
         });
       }
     });

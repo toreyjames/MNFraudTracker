@@ -1947,6 +1947,206 @@ body {
   border-bottom: none;
 }
 
+/* Flagged Businesses Results */
+.flagged-results {
+  margin-top: 1rem;
+}
+
+.results-header {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#results-count {
+  font-weight: 700;
+  color: var(--accent-red);
+}
+
+.results-note {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.flagged-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.flagged-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  transition: border-color 0.2s;
+}
+
+.flagged-item:hover {
+  border-color: var(--accent-blue);
+}
+
+.flagged-item.convicted {
+  border-left: 3px solid var(--accent-red);
+}
+
+.flagged-item.charged {
+  border-left: 3px solid #f97316;
+}
+
+.flagged-item.under-investigation {
+  border-left: 3px solid var(--accent-yellow);
+}
+
+.flagged-item.flagged {
+  border-left: 3px solid var(--accent-blue);
+}
+
+.flagged-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.flagged-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.flagged-status {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.status-convicted {
+  background: var(--accent-red);
+  color: var(--bg-dark);
+}
+
+.status-charged {
+  background: #f97316;
+  color: var(--bg-dark);
+}
+
+.status-investigation {
+  background: var(--accent-yellow);
+  color: var(--bg-dark);
+}
+
+.status-flagged {
+  background: var(--accent-blue);
+  color: var(--bg-dark);
+}
+
+.flagged-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.flagged-program {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.1rem 0.4rem;
+}
+
+.flagged-amount {
+  color: var(--accent-red);
+  font-weight: 600;
+}
+
+.flagged-defendants {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.flagged-notes {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.flagged-source {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.flagged-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.verify-link {
+  font-size: 0.7rem;
+  color: var(--accent-blue);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--accent-blue);
+  transition: all 0.2s;
+}
+
+.verify-link:hover {
+  background: var(--accent-blue);
+  color: var(--bg-dark);
+}
+
+.no-results {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Search sources */
+.search-sources {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.search-sources a {
+  color: var(--accent-blue);
+}
+
+.add-tip {
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Program filter dropdown */
+#program-filter {
+  padding: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+#program-filter:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
 /* Large Action Button */
 .action-btn.large {
   margin-top: 1rem;
