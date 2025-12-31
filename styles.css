@@ -992,6 +992,13 @@ body {
   border-left-color: var(--accent-green);
 }
 
+.action-grid-wide {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
 .action-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1216,12 +1223,54 @@ body {
   color: var(--text-primary);
 }
 
+.template-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  border-color: var(--accent-green);
+  color: var(--text-secondary);
+}
+
+.tab-btn.active {
+  background: var(--accent-green);
+  color: var(--bg-dark);
+  border-color: var(--accent-green);
+  font-weight: 600;
+}
+
 .template-box {
   background: var(--bg-dark);
   border: 1px solid var(--border-color);
   padding: 1rem;
   margin-bottom: 1rem;
   overflow-x: auto;
+}
+
+.template-agency {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.template-agency a {
+  color: var(--accent-blue);
 }
 
 .template-box pre {

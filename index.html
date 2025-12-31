@@ -351,28 +351,64 @@
     <section class="system-section action-section">
       <div class="section-label">TAKE ACTION</div>
       <h2>WHAT YOU CAN DO TODAY</h2>
+      <p class="section-note">Nick Shirley found $110M+ in ONE DAY. This isn't just FOF — it's daycare, healthcare, and housing. All under DHS.</p>
       
-      <div class="action-grid">
+      <div class="action-grid-wide">
         <div class="action-card primary">
-          <h3>📄 FILE RECORDS REQUESTS</h3>
-          <p>Minnesota Data Practices Act gives you the right to request government documents.</p>
+          <h3>📄 MDE RECORDS (Feeding Our Future)</h3>
           <ul>
-            <li>MDE communications about FOF (2019-2022)</li>
-            <li>DHS provider approval processes</li>
-            <li>Governor's office briefings on fraud</li>
-            <li>Post-audit personnel decisions</li>
+            <li>Internal communications about FOF (2019-2022)</li>
+            <li>Decision memo to resume payments after Guthmann ruling</li>
+            <li>Any appeals filed against the court order</li>
+            <li>Post-audit personnel review documents</li>
           </ul>
-          <button class="action-btn" onclick="showFOIA()">Get Request Template</button>
+          <button class="action-btn" onclick="showFOIA('mde')">MDE Request Template</button>
+        </div>
+
+        <div class="action-card primary">
+          <h3>📄 DHS RECORDS (Daycare, Healthcare, Housing)</h3>
+          <ul>
+            <li><strong>CCAP:</strong> Daycare provider approvals + site visit logs</li>
+            <li><strong>Medicaid:</strong> Provider billing audits + verification waivers</li>
+            <li><strong>Housing:</strong> Stabilization Services provider approvals</li>
+            <li>List of providers flagged but still active</li>
+          </ul>
+          <button class="action-btn" onclick="showFOIA('dhs')">DHS Request Template</button>
+        </div>
+
+        <div class="action-card primary">
+          <h3>📄 GOVERNOR'S OFFICE</h3>
+          <ul>
+            <li>Briefing logs on fraud (2020-2022)</li>
+            <li>Communications with MDE/DHS commissioners</li>
+            <li>Post-audit decision documents</li>
+            <li>Any recommendations to fire staff</li>
+          </ul>
+          <button class="action-btn" onclick="showFOIA('gov')">Governor Request Template</button>
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <div class="action-card">
+          <h3>🔍 VERIFY ON THE GROUND</h3>
+          <p><strong>What Nick did — you can do too:</strong></p>
+          <ul>
+            <li>Visit daycare addresses — are kids there?</li>
+            <li>Check healthcare clinic addresses — are they real?</li>
+            <li>Note business hours vs claimed service hours</li>
+            <li>Count cars/people vs claimed enrollment</li>
+            <li><a href="https://mblsportal.sos.state.mn.us/" target="_blank">Look up business registrations</a></li>
+          </ul>
         </div>
 
         <div class="action-card">
-          <h3>🔍 VERIFY ON THE GROUND</h3>
-          <p>Things anyone can check:</p>
+          <h3>🔗 FIND THE SAME OWNERS</h3>
+          <p><strong>The pattern Nick found:</strong> Same people own multiple "businesses" across programs.</p>
           <ul>
-            <li>Visit daycare addresses — are they real?</li>
-            <li><a href="https://mblsportal.sos.state.mn.us/" target="_blank">Check business registrations</a></li>
-            <li>Cross-reference owner names across programs</li>
-            <li>Map addresses appearing in multiple fraud cases</li>
+            <li>Cross-reference owner names: daycare + healthcare + housing</li>
+            <li>Check if same address appears in multiple programs</li>
+            <li>Look for family members as "separate" owners</li>
+            <li><a href="https://mblsportal.sos.state.mn.us/" target="_blank">MN SOS business search</a></li>
           </ul>
         </div>
 
@@ -381,9 +417,9 @@
           <p>Public databases:</p>
           <ul>
             <li><a href="https://www.fec.gov/" target="_blank">FEC</a> — Federal donations</li>
-            <li><a href="https://cfb.mn.gov/" target="_blank">MN Campaign Finance Board</a> — State donations</li>
-            <li>County assessor — Property records</li>
-            <li>PACER / MN Courts — Legal filings</li>
+            <li><a href="https://cfb.mn.gov/" target="_blank">MN CFB</a> — State donations</li>
+            <li>County assessor — Property purchases</li>
+            <li>Check if fraud defendants donated to politicians</li>
           </ul>
         </div>
 
@@ -391,10 +427,10 @@
           <h3>❓ ASK THE QUESTIONS</h3>
           <p>Demand answers:</p>
           <ul>
+            <li><strong>To DHS:</strong> How many providers flagged but still active?</li>
             <li><strong>To Walz:</strong> Why hasn't anyone been fired?</li>
-            <li><strong>To AG Ellison:</strong> Why no state charges?</li>
-            <li><strong>To legislators:</strong> Who waived verification?</li>
-            <li><strong>To journalists:</strong> Where are the internal docs?</li>
+            <li><strong>To AG:</strong> Why no state charges?</li>
+            <li><strong>To media:</strong> Why only cover FOF, not the rest?</li>
           </ul>
         </div>
       </div>
@@ -529,8 +565,17 @@
     <div class="modal-content">
       <span class="close-btn" onclick="closeFOIA()">&times;</span>
       <h2>Minnesota Data Practices Act Request</h2>
-      <p class="modal-intro">Copy this template and send to the relevant agency. Under Minnesota law, they must respond within 10 business days.</p>
-      <div class="template-box">
+      <p class="modal-intro">Copy this template and send to the agency. They must respond within 10 business days.</p>
+      
+      <div class="template-tabs">
+        <button class="tab-btn active" onclick="showTemplate('mde')">MDE (FOF)</button>
+        <button class="tab-btn" onclick="showTemplate('dhs')">DHS (Daycare/Healthcare)</button>
+        <button class="tab-btn" onclick="showTemplate('gov')">Governor's Office</button>
+      </div>
+
+      <div id="template-mde" class="template-box">
+        <p class="template-agency">Send to: <strong>Minnesota Department of Education</strong><br>
+        <a href="https://education.mn.gov/MDE/about/rule/dataprac/" target="_blank">MDE Data Practices Office →</a></p>
         <pre>
 [Your Name]
 [Your Address]
@@ -538,10 +583,11 @@
 [Date]
 
 Data Practices Office
-Minnesota Department of [Education/Human Services/Governor's Office]
-[Address - find at mn.gov]
+Minnesota Department of Education
+1500 Highway 36 West
+Roseville, MN 55113
 
-RE: Data Practices Act Request
+RE: Data Practices Act Request - Feeding Our Future
 
 Dear Data Practices Officer:
 
@@ -549,22 +595,21 @@ Pursuant to the Minnesota Government Data Practices Act,
 Minn. Stat. § 13.01 et seq., I request copies of the 
 following public government data:
 
-1. All communications (emails, memos, letters) regarding 
-   Feeding Our Future between January 2020 and January 2022, 
-   including communications with:
-   - Governor's office
-   - Commissioner Mary Cathryn Ricker (2019-2021)
-   - Commissioner Heather Mueller (2021-present)
-   - Federal agencies (FBI, USDA, HHS)
+1. All internal communications regarding Feeding Our Future 
+   between January 2020 and January 2022, including:
+   - Emails to/from Commissioner Mary Cathryn Ricker
+   - Emails to/from Commissioner Heather Mueller
+   - Communications with Governor's office
+   - Communications with federal agencies (FBI, USDA)
 
-2. All documents related to the decision to resume payments
-   to Feeding Our Future after the Guthmann court order.
+2. The decision memo to resume FOF payments after the 
+   Guthmann court order (mid-2021).
 
-3. Post-audit personnel review documents from June 2024
-   regarding oversight failures.
+3. Any appeals filed against the Guthmann ruling.
 
-4. Meeting notes and briefing documents regarding fraud 
-   in state-administered programs (2020-2022).
+4. Post-audit personnel review documents from June 2024.
+
+5. List of concerns/complaints received about FOF (2018-2022).
 
 Please notify me if costs will exceed $25 before proceeding.
 
@@ -576,6 +621,108 @@ Sincerely,
 [Your Email]
         </pre>
       </div>
+
+      <div id="template-dhs" class="template-box" style="display: none;">
+        <p class="template-agency">Send to: <strong>Minnesota Department of Human Services</strong><br>
+        <a href="https://mn.gov/dhs/general-public/data-practices/" target="_blank">DHS Data Practices Office →</a></p>
+        <pre>
+[Your Name]
+[Your Address]
+[City, State ZIP]
+[Date]
+
+Data Practices Office
+Minnesota Department of Human Services
+PO Box 64998
+St. Paul, MN 55164-0998
+
+RE: Data Practices Act Request - Provider Oversight
+
+Dear Data Practices Officer:
+
+Pursuant to the Minnesota Government Data Practices Act, 
+Minn. Stat. § 13.01 et seq., I request copies of the 
+following public government data:
+
+CHILD CARE ASSISTANCE PROGRAM (CCAP):
+1. Provider approval/denial records for [County] (2019-2023)
+2. Site visit logs and inspection reports
+3. Complaints received about daycare providers
+4. List of providers flagged for concerns but still active
+
+MEDICAID / HEALTHCARE:
+5. Provider billing audit results (2020-2023)
+6. Any waivers of verification requirements during COVID
+7. List of providers under investigation or flagged
+
+HOUSING STABILIZATION SERVICES:
+8. Provider approval records (2019-2023)
+9. Client verification procedures
+10. Complaints received about housing providers
+
+Please notify me if costs will exceed $25 before proceeding.
+
+I expect a response within 10 business days as required by law.
+
+Sincerely,
+[Your Name]
+[Your Phone]
+[Your Email]
+        </pre>
+      </div>
+
+      <div id="template-gov" class="template-box" style="display: none;">
+        <p class="template-agency">Send to: <strong>Office of Governor Tim Walz</strong><br>
+        <a href="https://mn.gov/governor/contact-us/" target="_blank">Governor's Office Contact →</a></p>
+        <pre>
+[Your Name]
+[Your Address]
+[City, State ZIP]
+[Date]
+
+Data Practices Office
+Office of Governor Tim Walz
+130 State Capitol
+75 Rev. Dr. Martin Luther King Jr. Blvd.
+St. Paul, MN 55155
+
+RE: Data Practices Act Request - Fraud Oversight
+
+Dear Data Practices Officer:
+
+Pursuant to the Minnesota Government Data Practices Act, 
+Minn. Stat. § 13.01 et seq., I request copies of the 
+following public government data:
+
+1. All briefings to the Governor's office regarding fraud
+   in state-administered programs (2020-2024), including:
+   - Feeding Our Future
+   - Child Care Assistance Program
+   - Medicaid provider fraud
+   - Housing Stabilization Services
+
+2. Communications between Governor's office and:
+   - MDE Commissioner Mary Cathryn Ricker (2019-2021)
+   - MDE Commissioner Heather Mueller (2021-present)
+   - DHS Commissioner Jodi Harpstead
+   - Attorney General Keith Ellison
+
+3. Any recommendations regarding personnel actions 
+   following the June 2024 Legislative Auditor report.
+
+4. Decision documents regarding oversight reforms.
+
+Please notify me if costs will exceed $25 before proceeding.
+
+I expect a response within 10 business days as required by law.
+
+Sincerely,
+[Your Name]
+[Your Phone]
+[Your Email]
+        </pre>
+      </div>
+
       <div class="modal-actions">
         <button class="copy-btn" onclick="copyTemplate()">Copy Template</button>
         <a href="https://mn.gov/admin/data-practices/data/requests/" target="_blank" class="info-link">How to file →</a>
@@ -589,19 +736,38 @@ Sincerely,
   </footer>
 
   <script>
-    function showFOIA() {
+    let currentTemplate = 'mde';
+    
+    function showFOIA(type) {
       document.getElementById('foia-modal').style.display = 'flex';
+      if (type) {
+        showTemplate(type);
+      }
     }
+    
     function closeFOIA() {
       document.getElementById('foia-modal').style.display = 'none';
     }
+    
+    function showTemplate(type) {
+      currentTemplate = type;
+      // Hide all templates
+      document.querySelectorAll('.template-box').forEach(el => el.style.display = 'none');
+      // Show selected template
+      document.getElementById('template-' + type).style.display = 'block';
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.tab-btn[onclick*="' + type + '"]').classList.add('active');
+    }
+    
     function copyTemplate() {
-      const template = document.querySelector('.template-box pre').textContent;
+      const template = document.querySelector('#template-' + currentTemplate + ' pre').textContent;
       navigator.clipboard.writeText(template);
       const btn = document.querySelector('.copy-btn');
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy Template', 2000);
     }
+    
     window.onclick = function(e) {
       const modal = document.getElementById('foia-modal');
       if (e.target === modal) {
