@@ -1561,6 +1561,46 @@ body {
   padding: 0.5rem;
   background: rgba(34, 197, 94, 0.1);
   border-left: 2px solid var(--accent-green);
+  margin-top: 0.75rem;
+}
+
+.gap-subhead {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0.75rem 0 0.5rem 0;
+}
+
+.gap-card .known-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+.gap-card .known-list li {
+  padding-left: 1.25rem;
+}
+
+.gap-card .known-list li::before {
+  content: "✓";
+  color: var(--accent-green);
+}
+
+.gap-card .known-list li a {
+  color: var(--accent-blue);
+}
+
+/* Video Embed */
+.video-embed {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.video-embed .twitter-tweet {
+  margin: 0 auto !important;
 }
 
 /* Slam Dunk */
