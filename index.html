@@ -214,36 +214,49 @@
         </div>
       </div>
 
-      <!-- FEDERAL FUNDING DATABASES -->
+      <!-- FEDERAL FUNDING SEARCH (USASpending API) -->
       <div class="search-tool" style="border-color: var(--accent-green);">
-        <h3 style="color: var(--accent-green);">💰 FEDERAL FUNDING DATABASES</h3>
-        <p>Search who received federal money from HHS, USDA, and other agencies:</p>
+        <h3 style="color: var(--accent-green);">💰 SEARCH FEDERAL FUNDING (Live API)</h3>
+        <p>Search USASpending.gov API for organizations that received federal money in Minnesota:</p>
         
+        <div class="search-input-row">
+          <input type="text" id="recipient-search" placeholder="Search by recipient name (e.g., 'daycare', 'childcare', company name)" />
+          <select id="agency-filter">
+            <option value="">All Federal Agencies</option>
+            <option value="075">HHS (Health & Human Services)</option>
+            <option value="012">USDA (Agriculture)</option>
+            <option value="086">HUD (Housing)</option>
+            <option value="091">Education</option>
+          </select>
+          <button class="search-btn" style="background: var(--accent-green);" onclick="searchUSASpending()">Search Federal $</button>
+        </div>
+
+        <div id="usa-spending-results" class="flagged-results" style="display: none;">
+          <div class="results-header">
+            <span id="usa-results-count">0</span> federal awards found in Minnesota
+            <span class="results-note">(via USASpending.gov API)</span>
+          </div>
+          <div id="usa-spending-list" class="flagged-list"></div>
+          <div class="api-note">
+            <p>⚠️ This searches federal grants/contracts. For daycare CCAP payments, those flow through state DHS — use <a href="https://www.lrl.mn.gov/docs/2023/other/230498.pdf" target="_blank">MN State Auditor reports</a>.</p>
+          </div>
+        </div>
+
         <div class="search-links" style="margin-top: 1rem;">
           <a href="https://www.usaspending.gov/search/?hash=0b8a304ed340e5b81c2d39f1a1fba0a4" target="_blank" class="search-link">
             <span class="link-icon">🇺🇸</span>
-            <span class="link-title">USASpending.gov</span>
-            <span class="link-desc">All federal grants/contracts to MN</span>
-          </a>
-          <a href="https://www.hhs.gov/grants-contracts/index.html" target="_blank" class="search-link">
-            <span class="link-icon">🏥</span>
-            <span class="link-title">HHS Grants & Contracts</span>
-            <span class="link-desc">Health & Human Services funding</span>
-          </a>
-          <a href="https://facweb.census.gov/uploadpdf.aspx" target="_blank" class="search-link">
-            <span class="link-icon">📊</span>
-            <span class="link-title">Federal Audit Clearinghouse</span>
-            <span class="link-desc">Entities receiving $750k+ federal funds</span>
+            <span class="link-title">Full USASpending Search</span>
+            <span class="link-desc">Advanced search on their site</span>
           </a>
           <a href="https://www.lrl.mn.gov/docs/2023/other/230498.pdf" target="_blank" class="search-link">
             <span class="link-icon">📋</span>
             <span class="link-title">MN State Auditor Report</span>
-            <span class="link-desc">2022 federal fund expenditures</span>
+            <span class="link-desc">State pass-through funds</span>
           </a>
           <a href="https://childcare.gov" target="_blank" class="search-link" style="border-color: var(--accent-red);">
             <span class="link-icon">🚨</span>
             <span class="link-title">Report Fraud (HHS)</span>
-            <span class="link-desc">New fraud hotline at childcare.gov</span>
+            <span class="link-desc">New fraud hotline</span>
           </a>
         </div>
       </div>
@@ -809,6 +822,85 @@ Sincerely,
       document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
     }
     
+    // USASpending API Search
+    async function searchUSASpending() {
+      const query = document.getElementById('recipient-search').value.trim();
+      const agency = document.getElementById('agency-filter').value;
+      
+      const resultsDiv = document.getElementById('usa-spending-results');
+      const listEl = document.getElementById('usa-spending-list');
+      const countEl = document.getElementById('usa-results-count');
+      
+      resultsDiv.style.display = 'block';
+      listEl.innerHTML = '<div class="loading">Searching USASpending.gov API...</div>';
+      
+      // Build the API request with correct format
+      const filters = {
+        place_of_performance_locations: [{ country: "USA", state: "MN" }],
+        time_period: [{ start_date: "2019-01-01", end_date: "2025-12-31" }],
+        award_type_codes: ["02", "03", "04", "05"] // Block grants, project grants, formula grants, cooperative agreements
+      };
+      
+      // Add recipient search if provided
+      if (query) {
+        filters.recipient_search_text = [query];
+      }
+      
+      // Add agency filter if selected (using toptier_agency_codes)
+      if (agency) {
+        filters.agencies = [{ type: "awarding", tier: "toptier", toptier_code: agency }];
+      }
+      
+      try {
+        const response = await fetch('https://api.usaspending.gov/api/v2/search/spending_by_award/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filters: filters,
+            fields: ["Award ID", "Recipient Name", "Award Amount", "Awarding Agency", "Award Type", "Start Date", "Description"],
+            page: 1,
+            limit: 50,
+            sort: "Award Amount",
+            order: "desc"
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.results && data.results.length > 0) {
+          countEl.textContent = data.results.length + (data.results.length >= 50 ? '+' : '');
+          
+          listEl.innerHTML = data.results.map(award => `
+            <div class="flagged-item federal">
+              <div class="flagged-header">
+                <span class="flagged-name">${award['Recipient Name'] || 'Unknown'}</span>
+                <span class="flagged-amount">$${(award['Award Amount'] || 0).toLocaleString()}</span>
+              </div>
+              <div class="flagged-details">
+                <span class="flagged-program">${award['Awarding Agency'] || 'Unknown Agency'}</span>
+                <span class="flagged-city">${award['Award Type'] || ''}</span>
+              </div>
+              <div class="flagged-notes">${(award['Description'] || 'No description').substring(0, 200)}...</div>
+              <div class="flagged-source">Award ID: ${award['Award ID']} | Start: ${award['Start Date'] || 'N/A'}</div>
+              <div class="flagged-actions">
+                <a href="https://www.usaspending.gov/award/${award['Award ID']}" target="_blank" class="verify-link">📄 View Full Award</a>
+                <a href="https://mblsportal.sos.state.mn.us/Business/Search?Name=${encodeURIComponent(award['Recipient Name'] || '')}" target="_blank" class="verify-link">🏢 MN SOS Lookup</a>
+              </div>
+            </div>
+          `).join('');
+        } else if (data.messages || data.detail) {
+          countEl.textContent = '0';
+          listEl.innerHTML = `<div class="no-results">API Error: ${data.messages || data.detail}. <a href="https://www.usaspending.gov/search/" target="_blank">Search directly on their site</a>.</div>`;
+        } else {
+          countEl.textContent = '0';
+          listEl.innerHTML = '<div class="no-results">No federal awards found matching your search. Try a broader search term or remove the agency filter.</div>';
+        }
+      } catch (error) {
+        console.error('USASpending API error:', error);
+        listEl.innerHTML = '<div class="no-results">Error connecting to USASpending.gov API. <a href="https://www.usaspending.gov/search/" target="_blank">Search directly on their site</a>.</div>';
+      }
+    }
+
     // Flagged business search
     function searchFlagged() {
       const query = document.getElementById('business-search').value;

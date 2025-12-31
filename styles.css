@@ -2045,6 +2045,30 @@ body {
   border-left: 3px solid var(--accent-blue);
 }
 
+.flagged-item.federal {
+  border-left: 3px solid var(--accent-green);
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: var(--accent-green);
+  font-style: italic;
+}
+
+.api-note {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid var(--accent-yellow);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.api-note a {
+  color: var(--accent-yellow);
+}
+
 .flagged-header {
   display: flex;
   justify-content: space-between;
