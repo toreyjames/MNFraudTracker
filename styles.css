@@ -247,16 +247,42 @@ body {
 }
 
 /* Visual Bar */
+.bar-title {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
 .deficit-bar {
   display: flex;
-  height: 40px;
+  height: 50px;
   border-radius: 4px;
   overflow: hidden;
   background: var(--bg-dark);
   border: 1px solid var(--border-color);
 }
 
-.bar-segment { height: 100%; }
+.bar-segment {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.bar-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--bg-dark);
+  text-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+.bar-segment.unknown .bar-label {
+  color: var(--text-muted);
+}
+
 .bar-segment.confirmed { background: var(--accent-red); }
 .bar-segment.confirmed2 { background: var(--accent-orange); }
 .bar-segment.potential { background: var(--accent-yellow); }
@@ -1342,10 +1368,16 @@ body {
   border-bottom-color: var(--accent-blue);
 }
 
+.stat-explainer {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
 .stat-note {
   margin-top: 1.5rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
 .stat-note a {
