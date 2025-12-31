@@ -172,34 +172,72 @@
         </div>
       </div>
 
+      <!-- SEARCH TOOL -->
+      <div class="search-tool">
+        <h3>🔍 INVESTIGATE YOUR CITY</h3>
+        <p>Enter a Minnesota city to search all public databases for providers to verify:</p>
+        
+        <div class="search-input-row">
+          <input type="text" id="city-search" placeholder="Enter city name (e.g., Minneapolis, St. Cloud, Rochester)" />
+          <button class="search-btn" onclick="searchCity()">Search All Databases</button>
+        </div>
+
+        <div id="search-results" class="search-results" style="display: none;">
+          <h4>Search results for: <span id="search-city-name"></span></h4>
+          <p class="search-tip">Click each link to search that database. Look for the same names/addresses across multiple programs.</p>
+          
+          <div class="search-links">
+            <a id="link-sos" href="#" target="_blank" class="search-link">
+              <span class="link-icon">🏢</span>
+              <span class="link-title">Business Registrations</span>
+              <span class="link-desc">MN Secretary of State — all registered businesses</span>
+            </a>
+            
+            <a id="link-childcare" href="#" target="_blank" class="search-link">
+              <span class="link-icon">👶</span>
+              <span class="link-title">Licensed Daycares</span>
+              <span class="link-desc">DHS Licensed Child Care Providers</span>
+            </a>
+            
+            <a id="link-healthcare" href="#" target="_blank" class="search-link">
+              <span class="link-icon">🏥</span>
+              <span class="link-title">Healthcare Providers</span>
+              <span class="link-desc">MN Board of Medical Practice</span>
+            </a>
+            
+            <a id="link-property" href="#" target="_blank" class="search-link">
+              <span class="link-icon">🏠</span>
+              <span class="link-title">Property Records</span>
+              <span class="link-desc">County assessor — who owns what</span>
+            </a>
+
+            <a id="link-google" href="#" target="_blank" class="search-link">
+              <span class="link-icon">📍</span>
+              <span class="link-title">Google Maps</span>
+              <span class="link-desc">See the actual locations</span>
+            </a>
+          </div>
+
+          <div class="search-checklist">
+            <h4>What to look for:</h4>
+            <ul>
+              <li>✓ Same owner name across daycare + healthcare + housing businesses</li>
+              <li>✓ Multiple businesses at the same address</li>
+              <li>✓ Businesses registered during COVID (2020-2021)</li>
+              <li>✓ Residential addresses listed as business locations</li>
+              <li>✓ No visible signage or activity at the address</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="action-grid">
         <div class="action-card">
-          <h3>🔍 VERIFY ON THE GROUND</h3>
-          <p><strong>What Nick did — you can do too:</strong></p>
-          <ul>
-            <li>Visit daycare addresses — are kids there?</li>
-            <li>Check healthcare clinic addresses — are they real?</li>
-            <li>Note business hours vs claimed service hours</li>
-            <li><a href="https://mblsportal.sos.state.mn.us/" target="_blank">Look up business registrations</a></li>
-          </ul>
-        </div>
-
-        <div class="action-card">
-          <h3>🔗 FIND THE SAME OWNERS</h3>
-          <p><strong>The pattern:</strong> Same people own multiple "businesses" across programs.</p>
-          <ul>
-            <li>Cross-reference owner names: daycare + healthcare + housing</li>
-            <li>Check if same address appears in multiple programs</li>
-            <li><a href="https://mblsportal.sos.state.mn.us/" target="_blank">MN SOS business search</a></li>
-          </ul>
-        </div>
-
-        <div class="action-card">
           <h3>💰 FOLLOW THE MONEY</h3>
+          <p>Check if fraud defendants donated to politicians:</p>
           <ul>
             <li><a href="https://www.fec.gov/" target="_blank">FEC</a> — Federal donations</li>
             <li><a href="https://cfb.mn.gov/" target="_blank">MN CFB</a> — State donations</li>
-            <li>County assessor — Property purchases</li>
           </ul>
         </div>
 
@@ -652,6 +690,70 @@ Sincerely,
 
   <script>
     let currentTemplate = 'mde';
+    
+    // County assessor websites for Minnesota
+    const countyAssessors = {
+      'minneapolis': 'https://www.hennepin.us/residents/property/property-information-search',
+      'st. paul': 'https://www.ramseycounty.us/residents/property-home/property-information',
+      'saint paul': 'https://www.ramseycounty.us/residents/property-home/property-information',
+      'rochester': 'https://www.co.olmsted.mn.us/propertytaxes/propertysearch',
+      'duluth': 'https://www.stlouiscountymn.gov/departments-a-z/assessor',
+      'bloomington': 'https://www.hennepin.us/residents/property/property-information-search',
+      'brooklyn park': 'https://www.hennepin.us/residents/property/property-information-search',
+      'st. cloud': 'https://www.co.stearns.mn.us/Government/CountyDepartments/Assessor',
+      'saint cloud': 'https://www.co.stearns.mn.us/Government/CountyDepartments/Assessor',
+      'default': 'https://www.revenue.state.mn.us/property-tax-administrators'
+    };
+    
+    function searchCity() {
+      const city = document.getElementById('city-search').value.trim();
+      if (!city) {
+        alert('Please enter a city name');
+        return;
+      }
+      
+      const cityLower = city.toLowerCase();
+      const cityEncoded = encodeURIComponent(city);
+      
+      // Update city name display
+      document.getElementById('search-city-name').textContent = city;
+      
+      // Generate search URLs
+      document.getElementById('link-sos').href = 
+        `https://mblsportal.sos.state.mn.us/Business/Search?City=${cityEncoded}`;
+      
+      document.getElementById('link-childcare').href = 
+        `https://licensinglookup.dhs.state.mn.us/`;
+      
+      document.getElementById('link-healthcare').href = 
+        `https://www.hlb.state.mn.us/verify/`;
+      
+      // Property lookup - use county-specific if available
+      const assessorUrl = countyAssessors[cityLower] || countyAssessors['default'];
+      document.getElementById('link-property').href = assessorUrl;
+      
+      // Google Maps search
+      document.getElementById('link-google').href = 
+        `https://www.google.com/maps/search/daycare+${cityEncoded}+minnesota`;
+      
+      // Show results
+      document.getElementById('search-results').style.display = 'block';
+      
+      // Scroll to results
+      document.getElementById('search-results').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Allow Enter key to trigger search
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('city-search');
+      if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            searchCity();
+          }
+        });
+      }
+    });
     
     function showFOIA(type) {
       document.getElementById('foia-modal').style.display = 'flex';
